@@ -29,3 +29,6 @@ Jeżeli produkt BadCoin w VIshop ma slider 2–1000, strona pobierze te wartośc
 
 ## Regulamin
 Plik `regulamin.pdf` zawiera regulamin przekazany dla sklepu BADPLAY i jest wyświetlany bezpośrednio na stronie w sekcji „REGULAMIN”.
+
+
+Regulamin jest dostępny jako osobna, responsywna podstrona `regulamin.html`.
