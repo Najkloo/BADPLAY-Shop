@@ -8,12 +8,19 @@ async function api(path,opt){const r=await fetch(API+path,opt);let d;try{d=await
 function status(ok,t){$('#status').innerHTML=`<i style="background:${ok?'#29d77d':'#ff1745'}"></i> ${esc(t)}`}
 function toast(t){const x=$('#toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),3000)}
 function close(){ $('#modal').classList.add('hidden');$('#error').classList.add('hidden') }
-function basePrice(p){const h=Object.entries(p.prices||{}).find(([k,v])=>k.startsWith('hotpay_')&&v!=null);if(h)return +h[1];return +(Object.values(p.prices||{}).find(v=>v!=null)||p.main_price||0)}
+function basePrice(p){
+ const main=Number(p.main_price);
+ if(Number.isFinite(main)&&main>0)return main;
+ const entries=Object.entries(p.prices||{});
+ const nonSms=entries.find(([k,v])=>v!=null&&!k.endsWith('_sms')&&Number.isFinite(Number(v)));
+ if(nonSms)return Number(nonSms[1]);
+ return 0;
+}).find(([k,v])=>k.startsWith('hotpay_')&&v!=null);if(h)return +h[1];return +(Object.values(p.prices||{}).find(v=>v!=null)||p.main_price||0)}
 async function init(){
  try{
   S.shop=await api('/');
   document.title=`${S.shop.name||'BADPLAY'} Store`;
-  if(S.shop.home_link)$('#discord').href=S.shop.home_link;
+  $('#discord').href='https://dc.badplay.pl';
   S.servers=await api('/servers/');
   renderServers();
   if(S.servers[0])await selectServer(S.servers[0].id);else $('#products').innerHTML='<div class="empty">Brak aktywnych serwerów.</div>';
@@ -47,32 +54,91 @@ function renderProducts(){
 }
 async function openProduct(id){
  try{
-  S.product=await api(`/products/${id}/`);const all=await api('/payments/');
+  S.product=await api(`/products/${id}/`);
+  const all=await api('/payments/');
   S.methods=all.filter(x=>S.product.prices?.[x.provider]!=null);
-  if(!S.methods.length)throw Error('Brak dostępnej metody płatności dla tego produktu.');
+
   $('#mName').textContent=S.product.name;
   $('#mDesc').innerHTML=window.DOMPurify?DOMPurify.sanitize(S.product.description||S.product.short_description||''):esc(S.product.short_description||'');
+
   $('#sliderBox').classList.toggle('hidden',!S.product.slider);
-  if(S.product.slider){const q=+S.product.slider_min;S.qty=q;$('#qty').min=q;$('#qty').max=S.product.slider_max;$('#qty').value=q;$('#min').textContent=q;$('#max').textContent=S.product.slider_max;$('#qtyValue').textContent=q;$('#qtyUnit').textContent=(S.product.slider_name||'BADCOIN').toUpperCase();$('#sliderName').textContent=S.product.slider_name||'Ilość'}else S.qty=1;
-  $('#provider').innerHTML=S.methods.map(x=>`<option value="${esc(x.provider)}">${esc(x.name||x.provider)}</option>`).join('');
-  const hot=S.methods.find(x=>x.provider==='hotpay_transfer')||S.methods.find(x=>x.provider?.startsWith('hotpay_'));if(hot)$('#provider').value=hot.provider;
-  $('#rules').classList.toggle('hidden',!S.shop.rules);$('#accept').checked=false;$('#player').value='';update();$('#modal').classList.remove('hidden');$('#player').focus()
+  if(S.product.slider){
+   const q=+S.product.slider_min;
+   S.qty=q;
+   $('#qty').min=q;
+   $('#qty').max=S.product.slider_max;
+   $('#qty').value=q;
+   $('#min').textContent=q;
+   $('#max').textContent=S.product.slider_max;
+   $('#qtyValue').textContent=q;
+   $('#qtyUnit').textContent=(S.product.slider_name||'BADCOIN').toUpperCase();
+   $('#sliderName').textContent=S.product.slider_name||'Ilość';
+  }else{
+   S.qty=1;
+  }
+
+  if(!S.methods.length){
+   $('#provider').innerHTML='<option value="">Brak skonfigurowanej metody</option>';
+   $('#buy').disabled=true;
+   $('#error').textContent='Ten produkt nie ma obecnie skonfigurowanej metody płatności w VIshop. W panelu VIshop → Operatorzy płatności dodaj operatora (np. HotPay), a następnie ustaw cenę tego operatora przy produkcie.';
+   $('#error').classList.remove('hidden');
+  }else{
+   $('#error').classList.add('hidden');
+   $('#buy').disabled=false;
+   $('#provider').innerHTML=S.methods.map(x=>`<option value="${esc(x.provider)}">${esc(x.name||x.provider)}</option>`).join('');
+   const hot=S.methods.find(x=>x.provider==='hotpay_transfer')||S.methods.find(x=>x.provider?.startsWith('hotpay_')&&!x.is_sms);
+   if(hot)$('#provider').value=hot.provider;
+  }
+
+  $('#rules').classList.toggle('hidden',!S.shop.rules);
+  $('#accept').checked=false;
+  $('#player').value='';
+  update();
+  $('#modal').classList.remove('hidden');
+  $('#player').focus();
  }catch(e){toast(e.message)}
 }
 function method(){return S.methods.find(x=>x.provider===$('#provider').value)}
-function unit(){const m=method();return +(S.product?.prices?.[m?.provider]||0)}
-function update(){if(!S.product)return;let total=unit()*S.qty;if(S.product.promo)total*=1-S.product.promo/100;$('#qtyValue').textContent=S.qty;$('#total').textContent=money(total,S.shop.currency)}
+function unit(){
+ const m=method();
+ if(!m||!S.product)return 0;
+ if(m.is_sms||m.provider?.endsWith('_sms')){
+  const num=(m.sms_numbers||[]).find(n=>n.id===S.product.prices?.[m.provider]);
+  return num?Number(num.price):0;
+ }
+ return Number(S.product.prices?.[m.provider]||0);
+}
+function update(){
+ if(!S.product)return;
+ let total=unit()*(S.product.slider?S.qty:1);
+ if(S.product.promo)total*=1-S.product.promo/100;
+ $('#qtyValue').textContent=S.qty;
+ $('#total').textContent=money(total,S.shop.currency);
+}
 async function buy(){
- $('#buy').disabled=true;$('#error').classList.add('hidden');
+ $('#buy').disabled=true;
+ $('#error').classList.add('hidden');
  const player=$('#player').value.trim(),m=method();
  if(!/^[A-Za-z0-9_]{3,16}$/.test(player))return fail('Podaj poprawny nick Minecraft (3–16 znaków).');
  if(!m)return fail('Wybierz metodę płatności.');
  if(S.shop.rules&&!$('#accept').checked)return fail('Zaakceptuj regulamin sklepu.');
+ if(m.is_sms||m.provider?.endsWith('_sms'))return fail('Płatności SMS wymagają dodatkowego kodu SMS. Wybierz HotPay przelew/BLIK lub inną metodę internetową.');
  try{
-  const r=await fetch(`${API}/products/${S.product.id}/payments/`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({player,provider:m.provider,quantity:S.qty,success_page:location.origin+location.pathname})});
-  let d;try{d=await r.json()}catch{d=await r.text()}if(!r.ok)throw Error(typeof d==='string'?d:(d?.detail||'Nie udało się utworzyć płatności.'));
-  if(d.payment_url)location.href=d.payment_url;else toast('Płatność została utworzona.')
- }catch(e){fail(e.message)}
+  const body={player,provider:m.provider,success_page:location.origin+location.pathname+'?payment={PAYMENT_ID}'};
+  if(S.product.slider)body.quantity=parseInt(S.qty,10);
+  const r=await fetch(`${API}/products/${S.product.id}/payments/`,{method:'POST',headers:{'Content-Type':'application/json;charset=utf-8'},body:JSON.stringify(body)});
+  let d;try{d=await r.json()}catch{d=await r.text()}
+  if(!r.ok)throw Error(typeof d==='string'?d:(d?.detail||'Nie udało się utworzyć płatności.'));
+  if(d.payment_url)location.href=d.payment_url;else toast('Płatność została utworzona.');
+ }catch(e){fail(mapApiError(e.message))}
+}
+function mapApiError(t){
+ const s=String(t||'');
+ if(s.includes('Incorrect payment provider'))return 'Wybrana metoda płatności nie jest dostępna dla tego produktu.';
+ if(s.includes('Incorrect player name'))return 'Podano nieprawidłowy nick Minecraft.';
+ if(s.includes('Incorrect quantity'))return 'Nieprawidłowa ilość produktu.';
+ if(s.includes('This shop is offline'))return 'Sklep jest obecnie offline.';
+ return s;
 }
 function fail(t){$('#error').textContent=t;$('#error').classList.remove('hidden');$('#buy').disabled=false}
 function renderRecent(items){
