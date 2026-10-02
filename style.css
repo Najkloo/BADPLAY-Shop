@@ -161,3 +161,29 @@ footer{border-top:1px solid var(--bp-line);margin-top:80px}
 .voucher-note{display:flex;gap:8px;align-items:flex-start;margin-top:16px;color:#4f4f56;font-size:8px;line-height:1.6}.voucher-note>span{flex:none;display:grid;place-items:center;width:17px;height:17px;border-radius:50%;border:1px solid rgba(255,255,255,.08);color:#777}
 .site-footer{display:block}.site-footer .footer-disclaimer{margin-top:13px}.site-footer:after{content:"Strona zasilana przez VIshop.pl";display:block;margin-top:13px;color:#3f3f45;font-size:8px}.site-footer:after{cursor:pointer}
 @media(max-width:650px){.voucher-modal-box{padding:24px}.voucher-visual{width:64px;height:64px}}
+
+
+/* ===== BADPLAY 2026 — READABILITY + SHARED HEADER/FOOTER ===== */
+body{font-size:14px}
+.topbar{min-height:76px}
+.topbar nav a,.discord,.voucher-top{font-size:11px}
+.brand{font-size:20px}
+.hero p{font-size:14px}.hero-meta{font-size:10px}
+.heading small{font-size:10px}.heading h2{font-size:28px}.status{font-size:11px}
+.product-name{font-size:17px}.product-desc{font-size:12px;line-height:1.7}.price{font-size:20px}.buy{font-size:10px}
+.purchase b{font-size:11px}.purchase span{font-size:10px}.empty{font-size:12px}
+.site-footer{font-size:12px}.footer-copy,.footer-credit{font-size:12px}.footer-disclaimer{font-size:11px}.site-footer:after{font-size:10px}
+.voucher-top{padding:11px 18px}
+/* Rules page uses exactly the same topbar/footer visual language as the shop. */
+.rules-page .topbar{max-width:none;width:100%;box-sizing:border-box}
+.rules-page .topbar nav{flex:1;display:flex;justify-content:center;align-items:center;gap:24px}
+.rules-page .topbar .discord{order:4}
+.rules-page .rules-main{padding-top:70px}
+.rules-hero>p{font-size:15px;line-height:1.85}
+.rules-meta{font-size:10px}
+.toc-title{font-size:10px}.rules-toc>a{font-size:12px;padding:10px 0}.rules-toc>a span{font-size:9px}
+.rules-note b{font-size:13px}.rules-note p{font-size:12px;line-height:1.75}
+.rule-num{font-size:11px}.rule-section h2{font-size:22px}.rule-section p{font-size:14px;line-height:1.9;color:#92929a}
+.rules-footer{font-size:12px}.rules-footer a{font-size:12px}
+@media(max-width:850px){.rules-page .topbar nav{gap:13px}.rules-page .topbar nav a{font-size:10px}}
+@media(max-width:650px){.topbar nav a,.discord,.voucher-top{font-size:10px}.brand{font-size:18px}.heading h2{font-size:24px}.product-desc{font-size:11px}.site-footer{font-size:11px}.rules-page .topbar nav{order:5;width:100%;overflow-x:auto;justify-content:flex-start;padding-bottom:3px}.rules-page .voucher-top{margin-left:auto}.rules-hero>p{font-size:14px}.rules-toc>a{font-size:12px}.rule-section h2{font-size:20px}.rule-section p{font-size:13px;line-height:1.85}}
