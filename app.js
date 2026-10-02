@@ -23,8 +23,7 @@ async function init(){
   document.title=`${S.shop.name||'BADPLAY'} Store`;
   $('#discord').href='https://dc.badplay.pl';
   S.servers=await api('/servers/');
-  renderServers();
-  if(S.servers[0])await selectServer(S.servers[0].id);else $('#products').innerHTML='<div class="empty">Brak aktywnych serwerów.</div>';
+  if(S.servers[0])await selectServer(S.servers[0].id);else $('#products').innerHTML='<div class="empty">Brak dostępnych produktów.</div>';
   try{renderRecent(await api('/latest_payments/?amount=6'))}catch{$('#recent').innerHTML='<div class="empty">Brak danych o ostatnich zakupach.</div>'}
   status(true,'VIshop API online');
  }catch(e){status(false,'VIshop API niedostępne');$('#servers').innerHTML=`<div class="empty">Nie udało się pobrać danych sklepu.<br><small>${esc(e.message)}</small></div>`}
@@ -49,7 +48,7 @@ function renderProducts(){
  if(!list.length){w.innerHTML='<div class="empty">Brak produktów na tym serwerze.</div>';return}
  list.forEach(p=>{
   const d=document.createElement('article');d.className='product';
-  d.innerHTML=`${p.promo?`<span class="promo">-${esc(p.promo)}%</span>`:''}<div class="product-img">${p.image?`<img src="${esc(p.image)}" alt="">`:'<span style="font-size:42px;color:#c60d2d">✦</span>'}</div><div class="product-body"><div class="product-name">${esc(p.name)}</div><div class="product-desc">${esc(p.short_description||'')}${p.slider?' • wybór ilości':''}</div><div class="product-bottom"><div class="price">${money(basePrice(p),S.shop.currency)}<small>${p.slider?' / szt.':''}</small></div><button class="buy">KUP TERAZ</button></div></div>`;
+  d.innerHTML=`${p.promo?`<span class="promo">-${esc(p.promo)}%</span>`:''}<div class="product-img">${p.image?`<img src="${esc(p.image)}" alt="">`:'<img src="assets/badcoin.png" class="product-fallback-img" alt="BADCOIN">'}</div><div class="product-body"><div class="product-name">${esc(p.name)}</div><div class="product-desc">${esc(p.short_description||'')}${p.slider?' • wybór ilości':''}</div><div class="product-bottom"><div class="price">${money(basePrice(p),S.shop.currency)}<small>${p.slider?' / szt.':''}</small></div><button class="buy">KUP TERAZ</button></div></div>`;
   d.querySelector('.buy').onclick=()=>openProduct(p.id);w.appendChild(d)
  })
 }
@@ -150,3 +149,26 @@ $('#qty').addEventListener('input',e=>{S.qty=+e.target.value;update()});
 $('#provider').addEventListener('change',update);$('#buy').addEventListener('click',buy);
 document.addEventListener('click',e=>{if(e.target.matches('[data-close]'))close()});
 init();
+
+
+/* BADPLAY voucher UI */
+document.addEventListener('DOMContentLoaded',()=>{
+ const vb=document.getElementById('voucherBtn');
+ const vm=document.getElementById('voucherModal');
+ const vc=document.getElementById('voucherCode');
+ const vp=document.getElementById('voucherPlayer');
+ const ve=document.getElementById('voucherError');
+ const vs=document.getElementById('voucherSubmit');
+ const close=()=>vm?.classList.add('hidden');
+ vb?.addEventListener('click',()=>{ve?.classList.add('hidden');vm?.classList.remove('hidden');setTimeout(()=>vc?.focus(),60)});
+ document.querySelectorAll('[data-close-voucher]').forEach(x=>x.addEventListener('click',close));
+ vs?.addEventListener('click',async()=>{
+   const code=(vc?.value||'').trim();
+   const player=(vp?.value||'').trim();
+   ve?.classList.add('hidden');
+   if(!/^[A-Za-z0-9_-]{3,64}$/.test(code))return voucherFail('Podaj poprawny kod vouchera.');
+   if(!/^[A-Za-z0-9_]{3,16}$/.test(player))return voucherFail('Podaj poprawny nick Minecraft (3–16 znaków).');
+   voucherFail('Obsługa realizacji vouchera wymaga endpointu vouchera po stronie VIshop. Interfejs jest gotowy, ale nie wysyłamy kodu do nieznanego endpointu.');
+ });
+ function voucherFail(t){if(ve){ve.textContent=t;ve.classList.remove('hidden')}}
+});

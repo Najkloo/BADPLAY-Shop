@@ -72,3 +72,71 @@ footer{border-top:1px solid var(--bp-line);margin-top:80px}
  .rule-section h2{font-size:18px}.rule-section p{font-size:11px;line-height:1.8}
  .rules-footer{flex-wrap:wrap}
 }
+
+
+/* ===== BADPLAY STORE — FINAL POLISH ===== */
+.topbar{gap:18px}
+.topbar nav{flex:1;display:flex;justify-content:center;align-items:center;gap:24px}
+.topbar .discord{order:4}
+.voucher-top{
+  order:3;
+  appearance:none;border:0;cursor:pointer;
+  padding:11px 17px;border-radius:9px;
+  background:linear-gradient(135deg,#ff1745,#c90032);
+  color:#fff;font-size:9px;font-weight:950;letter-spacing:.12em;
+  box-shadow:0 8px 30px rgba(255,23,69,.18);
+  transition:.2s;
+}
+.voucher-top:hover{transform:translateY(-1px);box-shadow:0 12px 34px rgba(255,23,69,.28)}
+.voucher-top:active{transform:translateY(0)}
+.site-footer{
+  max-width:1180px;margin:85px auto 0;padding:30px 34px 34px;
+  border-top:1px solid rgba(255,255,255,.07);
+  color:#64646c;font-size:10px;line-height:1.7;
+}
+.footer-main{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.footer-copy{color:#8a8a91}
+.footer-credit{color:#777}
+.footer-credit strong{color:#e8e8ea}
+.footer-disclaimer{margin-top:12px;color:#4f4f56;max-width:720px}
+.voucher-card{max-width:470px}
+.voucher-card h2{margin:7px 0 8px;font-size:26px;letter-spacing:-.04em}
+.voucher-sub{color:#777;font-size:11px;line-height:1.7;margin:0 0 22px}
+.voucher-card label{display:block;margin:13px 0 7px;color:#aaa;font-size:9px;font-weight:800;letter-spacing:.08em}
+.voucher-card .input{
+  width:100%;box-sizing:border-box;padding:13px 14px;
+  border:1px solid rgba(255,255,255,.08);border-radius:9px;
+  background:#08080a;color:#fff;outline:none;
+}
+.voucher-card .input:focus{border-color:rgba(255,23,69,.55);box-shadow:0 0 0 3px rgba(255,23,69,.07)}
+.voucher-submit{width:100%;margin-top:18px}
+.voucher-note{margin-top:14px;color:#555;font-size:9px;line-height:1.6}
+@media(max-width:850px){
+  .topbar nav{gap:13px}
+  .topbar nav a{font-size:8px}
+}
+@media(max-width:650px){
+  .topbar{flex-wrap:wrap}
+  .topbar nav{order:5;width:100%;overflow-x:auto;justify-content:flex-start;padding-bottom:3px}
+  .voucher-top{margin-left:auto}
+  .site-footer{padding-left:20px;padding-right:20px}
+  .footer-main{flex-direction:column;align-items:flex-start}
+}
+
+/* ===== BADPLAY IMAGE SYSTEM ===== */
+.brand img{width:34px;height:34px;object-fit:contain;border-radius:9px;filter:drop-shadow(0 0 12px rgba(255,23,69,.18))}
+.hero{position:relative;overflow:hidden}
+.hero-logo{display:block;width:min(145px,30vw);height:min(145px,30vw);object-fit:contain;margin:0 auto 16px;filter:drop-shadow(0 0 35px rgba(255,23,69,.24))}
+.hero h1{margin-top:2px}
+.store-intro{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:25px 28px;margin:0 0 22px;border:1px solid rgba(255,255,255,.065);border-radius:15px;background:linear-gradient(105deg,rgba(255,23,69,.045),rgba(255,255,255,.012))}
+.store-intro span{display:block;color:#ff1745;font-size:8px;font-weight:950;letter-spacing:.18em;margin-bottom:8px}
+.store-intro strong{display:block;font-size:18px;letter-spacing:-.025em}
+.store-intro p{margin:7px 0 0;color:#686870;font-size:10px}
+.store-glow{width:64px;height:64px;display:grid;place-items:center;flex:none;border-radius:14px;background:radial-gradient(circle,rgba(255,23,69,.16),transparent 70%);border:1px solid rgba(255,23,69,.12)}
+.store-glow img{width:32px;height:32px;image-rendering:auto;filter:drop-shadow(0 0 14px rgba(255,23,69,.65))}
+.product-img img{width:100%;height:100%;object-fit:contain}
+.product-img .product-fallback-img{width:54px;height:54px;image-rendering:auto;filter:drop-shadow(0 0 18px rgba(255,23,69,.55))}
+@media(max-width:560px){
+ .store-intro{padding:20px}.store-intro strong{font-size:15px}.store-glow{width:52px;height:52px}
+ .hero-logo{width:105px;height:105px}
+}

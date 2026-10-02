@@ -14,38 +14,50 @@
 <body>
 <div class="ambient a"></div><div class="ambient b"></div>
 <header class="topbar">
-  <a class="brand" href="#"><span class="bp">BP</span><span>BAD<span>PLAY</span></span></a>
-  <nav><a class="active" href="#sklep">SKLEP</a><a href="#serwery">SERWERY</a><a href="#ostatnie">OSTATNIE ZAKUPY</a><a href="regulamin.html">REGULAMIN</a></nav>
+  <a class="brand" href="https://badplay.pl" aria-label="BADPLAY"><img src="assets/logo.png" alt="BADPLAY"><span>BAD<span>PLAY</span></span></a>
+  <nav>
+      <a class="active" href="index.html">SKLEP</a>
+      <a href="https://badplay.pl" id="homeLink">STRONA GŁÓWNA</a>
+      <a href="regulamin.html">REGULAMIN</a>
+      <a href="https://dc.badplay.pl" target="_blank" rel="noopener">DISCORD</a>
+    </nav>
+  <button id="voucherBtn" class="voucher-top" type="button">VOUCHER</button>
   <a id="discord" class="discord" href="https://dc.badplay.pl" target="_blank" rel="noopener">DISCORD</a>
 </header>
 
 <main>
 <section class="hero">
-  <div class="badge"><i></i> OFICJALNY SKLEP BADPLAY</div>
+  <div class="badge"><i></i> OFICJALNY SKLEP BADPLAY</div><img class="hero-logo" src="assets/badplay-logo.png" alt="BADPLAY">
   <h1>BAD<span>PLAY</span> STORE</h1>
   <p>Wybierz produkt, podaj swój nick i przejdź do bezpiecznej płatności.</p>
   <div class="hero-meta"><span></span><b>PREMIUM STORE EXPERIENCE</b><span></span></div>
 </section>
 
-<section id="serwery" class="section">
-  <div class="heading"><div><small>01 / SERWERY</small><h2>Wybierz serwer</h2></div><div id="status" class="status"><i></i> Łączenie...</div></div>
-  <div id="servers" class="servers"></div>
-</section>
-
 <section id="sklep" class="section products-section">
-  <div class="heading"><div><small>02 / SKLEP</small><h2>Produkty</h2></div><div id="selectedServer" class="selected-server"></div></div>
-  <div id="products" class="products"><div class="empty">Ładowanie produktów...</div></div>
+
+  <div class="heading"><div><small>01 / OFERTA</small><h2>Produkty</h2></div><div id="selectedServer" class="selected-server"></div></div>
+  <div class="store-intro">
+  <div><span>BADPLAY STORE</span><strong>Wybierz to, czego potrzebujesz.</strong><p>BadCoin, pakiety i cyfrowe dodatki dostępne bezpośrednio w sklepie.</p></div>
+  <div class="store-glow"><img src="assets/badcoin.png" alt="BadCoin"></div>
+</div>
+<div id="products" class="products"><div class="empty">Ładowanie produktów...</div></div>
 </section>
 
 <section id="ostatnie" class="section recent-section">
-  <div class="heading"><div><small>03 / AKTYWNOŚĆ</small><h2>Ostatnie zakupy</h2></div></div>
+  <div class="heading"><div><small>02 / AKTYWNOŚĆ</small><h2>Ostatnie zakupy</h2></div></div>
   <div id="recent" class="recent"><div class="empty">Ładowanie...</div></div>
 </section>
 
 
 </main>
 
-<footer><div class="footer-left"><span class="bp">BP</span><b>BADPLAY</b></div><span>Sklep zasilany przez <a href="https://vishop.pl" target="_blank" rel="noopener">VIshop.pl</a></span></footer>
+<footer class="site-footer">
+  <div class="footer-main">
+    <div class="footer-copy">© 2026 BADPLAY. Wszelkie prawa zastrzeżone.</div>
+    <div class="footer-credit">Stworzone przez <strong>Najklo</strong>.</div>
+  </div>
+  <div class="footer-disclaimer">Serwer badplay.pl nie jest w żaden sposób powiązany z firmą Mojang lub Microsoft.</div>
+</footer>
 
 <div id="modal" class="modal hidden">
  <div class="backdrop" data-close></div>
@@ -71,5 +83,23 @@
 </div>
 <div id="toast" class="toast"></div>
 <script src="app.js"></script>
+
+<div id="voucherModal" class="modal hidden">
+  <div class="modal-backdrop" data-close-voucher></div>
+  <div class="modal-card voucher-card">
+    <button class="modal-close" type="button" data-close-voucher>×</button>
+    <div class="modal-kicker">BADPLAY / VOUCHER</div>
+    <h2>Dodaj voucher</h2>
+    <p class="voucher-sub">Wpisz kod vouchera, aby przypisać go do swojego konta.</p>
+    <label for="voucherCode">Kod vouchera</label>
+    <input id="voucherCode" class="input" type="text" placeholder="NP. BADPLAY-XXXX-XXXX" autocomplete="off">
+    <label for="voucherPlayer">Nick Minecraft</label>
+    <input id="voucherPlayer" class="input" type="text" placeholder="Twój nick" autocomplete="off">
+    <button id="voucherSubmit" class="buy voucher-submit" type="button">DODAJ VOUCHER</button>
+    <div id="voucherError" class="error hidden"></div>
+    <div class="voucher-note">Jeżeli kod nie działa, skontaktuj się z administracją BADPLAY.</div>
+  </div>
+</div>
+
 </body>
 </html>
