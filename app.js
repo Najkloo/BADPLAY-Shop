@@ -15,7 +15,8 @@ function basePrice(p){
  const nonSms=entries.find(([k,v])=>v!=null&&!k.endsWith('_sms')&&Number.isFinite(Number(v)));
  if(nonSms)return Number(nonSms[1]);
  return 0;
-}).find(([k,v])=>k.startsWith('hotpay_')&&v!=null);if(h)return +h[1];return +(Object.values(p.prices||{}).find(v=>v!=null)||p.main_price||0)}
+}
+
 async function init(){
  try{
   S.shop=await api('/');
