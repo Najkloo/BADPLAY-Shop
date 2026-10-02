@@ -19,7 +19,6 @@
       <a class="active" href="index.html">SKLEP</a>
       <a href="https://badplay.pl" id="homeLink">STRONA GŁÓWNA</a>
       <a href="regulamin.html">REGULAMIN</a>
-      <a href="https://dc.badplay.pl" target="_blank" rel="noopener">DISCORD</a>
     </nav>
   <button id="voucherBtn" class="voucher-top" type="button">VOUCHER</button>
   <a id="discord" class="discord" href="https://dc.badplay.pl" target="_blank" rel="noopener">DISCORD</a>
@@ -29,7 +28,7 @@
 <section class="hero">
   <div class="badge"><i></i> OFICJALNY SKLEP BADPLAY</div><img class="hero-logo" src="assets/badplay-logo.png" alt="BADPLAY">
   <h1>BAD<span>PLAY</span> STORE</h1>
-  <p>Wybierz produkt, podaj swój nick i przejdź do bezpiecznej płatności.</p>
+  <p>Oficjalne produkty BADPLAY. Wybierz ofertę, podaj nick i przejdź do bezpiecznej płatności.</p>
   <div class="hero-meta"><span></span><b>PREMIUM STORE EXPERIENCE</b><span></span></div>
 </section>
 
@@ -85,19 +84,25 @@
 <script src="app.js"></script>
 
 <div id="voucherModal" class="modal hidden">
-  <div class="modal-backdrop" data-close-voucher></div>
-  <div class="modal-card voucher-card">
-    <button class="modal-close" type="button" data-close-voucher>×</button>
-    <div class="modal-kicker">BADPLAY / VOUCHER</div>
-    <h2>Dodaj voucher</h2>
-    <p class="voucher-sub">Wpisz kod vouchera, aby przypisać go do swojego konta.</p>
-    <label for="voucherCode">Kod vouchera</label>
-    <input id="voucherCode" class="input" type="text" placeholder="NP. BADPLAY-XXXX-XXXX" autocomplete="off">
-    <label for="voucherPlayer">Nick Minecraft</label>
-    <input id="voucherPlayer" class="input" type="text" placeholder="Twój nick" autocomplete="off">
-    <button id="voucherSubmit" class="buy voucher-submit" type="button">DODAJ VOUCHER</button>
+  <div class="backdrop" data-close-voucher></div>
+  <div class="modal-box voucher-modal-box">
+    <button class="x" type="button" data-close-voucher aria-label="Zamknij">×</button>
+    <div class="voucher-visual"><img src="assets/badplay-logo.png" alt="BADPLAY"></div>
+    <div class="voucher-kicker">BADPLAY / VOUCHER</div>
+    <h2>Realizacja vouchera</h2>
+    <p class="voucher-sub">Wpisz kod otrzymany od administracji i przypisz jego zawartość do swojego konta Minecraft.</p>
+    <div class="voucher-field">
+      <label for="voucherCode">KOD VOUCHERA</label>
+      <input id="voucherCode" class="input" type="text" placeholder="Wpisz kod vouchera" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="voucher-field">
+      <label for="voucherPlayer">NICK MINECRAFT</label>
+      <input id="voucherPlayer" class="input" type="text" placeholder="Twój nick Minecraft" autocomplete="off" maxlength="16">
+    </div>
+    <button id="voucherSubmit" class="pay voucher-submit" type="button"><span>REALIZUJ VOUCHER</span><b>→</b></button>
     <div id="voucherError" class="error hidden"></div>
-    <div class="voucher-note">Jeżeli kod nie działa, skontaktuj się z administracją BADPLAY.</div>
+    <div id="voucherSuccess" class="voucher-success hidden"><span>✓</span><div><b>Voucher zrealizowany</b><small>Jeżeli nagroda jest automatyczna, powinna być już przypisana do konta.</small></div></div>
+    <div class="voucher-note"><span>i</span> Kod może zostać wykorzystany tylko raz. Realizacja jest obsługiwana przez API VIshop.</div>
   </div>
 </div>
 

@@ -38,3 +38,6 @@ Nawigacja: Sklep, Strona główna BADPLAY, Regulamin, Discord oraz przycisk Vouc
 
 
 Assets: logo BADPLAY oraz grafika BadCoin znajdują się w katalogu `assets/` i są używane bezpośrednio na stronie.
+
+
+Voucher korzysta bezpośrednio z publicznego endpointu VIshop `POST /vouchers/use/` i wysyła `{code, player}`.

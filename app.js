@@ -151,24 +151,59 @@ document.addEventListener('click',e=>{if(e.target.matches('[data-close]'))close(
 init();
 
 
-/* BADPLAY voucher UI */
+
+
+/* BADPLAY voucher — VIshop public API: POST /vouchers/use/ */
 document.addEventListener('DOMContentLoaded',()=>{
- const vb=document.getElementById('voucherBtn');
- const vm=document.getElementById('voucherModal');
- const vc=document.getElementById('voucherCode');
- const vp=document.getElementById('voucherPlayer');
- const ve=document.getElementById('voucherError');
- const vs=document.getElementById('voucherSubmit');
- const close=()=>vm?.classList.add('hidden');
- vb?.addEventListener('click',()=>{ve?.classList.add('hidden');vm?.classList.remove('hidden');setTimeout(()=>vc?.focus(),60)});
- document.querySelectorAll('[data-close-voucher]').forEach(x=>x.addEventListener('click',close));
- vs?.addEventListener('click',async()=>{
+ const vb=$('#voucherBtn'), vm=$('#voucherModal'), vc=$('#voucherCode'), vp=$('#voucherPlayer');
+ const ve=$('#voucherError'), vs=$('#voucherSuccess'), submit=$('#voucherSubmit');
+ const closeVoucher=()=>{vm?.classList.add('hidden'); ve?.classList.add('hidden'); vs?.classList.add('hidden');};
+ vb?.addEventListener('click',()=>{ve?.classList.add('hidden');vs?.classList.add('hidden');vm?.classList.remove('hidden');setTimeout(()=>vc?.focus(),60)});
+ document.querySelectorAll('[data-close-voucher]').forEach(el=>el.addEventListener('click',closeVoucher));
+ vc?.addEventListener('input',()=>{vc.value=vc.value.toUpperCase()});
+ submit?.addEventListener('click',redeemVoucher);
+ vp?.addEventListener('keydown',e=>{if(e.key==='Enter')redeemVoucher()});
+ vc?.addEventListener('keydown',e=>{if(e.key==='Enter')vp?.focus()});
+ async function redeemVoucher(){
    const code=(vc?.value||'').trim();
    const player=(vp?.value||'').trim();
-   ve?.classList.add('hidden');
-   if(!/^[A-Za-z0-9_-]{3,64}$/.test(code))return voucherFail('Podaj poprawny kod vouchera.');
-   if(!/^[A-Za-z0-9_]{3,16}$/.test(player))return voucherFail('Podaj poprawny nick Minecraft (3–16 znaków).');
-   voucherFail('Obsługa realizacji vouchera wymaga endpointu vouchera po stronie VIshop. Interfejs jest gotowy, ale nie wysyłamy kodu do nieznanego endpointu.');
- });
- function voucherFail(t){if(ve){ve.textContent=t;ve.classList.remove('hidden')}}
+   ve?.classList.add('hidden'); vs?.classList.add('hidden');
+   if(!/^[A-Za-z0-9_-]{3,64}$/.test(code))return voucherError('Wpisz poprawny kod vouchera.');
+   if(!/^\.?\w{3,16}$/.test(player))return voucherError('Podaj poprawny nick Minecraft (3–16 znaków).');
+   submit.disabled=true; submit.classList.add('loading'); submit.querySelector('span').textContent='SPRAWDZANIE...';
+   try{
+     const res=await fetch(`${API}/vouchers/use/`,{
+       method:'POST',
+       headers:{'Content-Type':'application/json;charset=utf-8','Accept':'application/json'},
+       body:JSON.stringify({code,player})
+     });
+     let data; try{data=await res.json()}catch{data=await res.text()}
+     if(!res.ok) throw new Error(voucherApiError(data));
+     vs?.classList.remove('hidden');
+     vc.value=''; vp.value='';
+     toast('Voucher został zrealizowany.');
+     submit.querySelector('span').textContent='ZREALIZOWANO';
+     setTimeout(closeVoucher,1800);
+   }catch(err){
+     voucherError(err.message||'Nie udało się zrealizować vouchera.');
+   }finally{
+     submit.disabled=false; submit.classList.remove('loading');
+     if(!vs||vs.classList.contains('hidden'))submit.querySelector('span').textContent='REALIZUJ VOUCHER';
+   }
+ }
+ function voucherError(t){if(ve){ve.textContent=t;ve.classList.remove('hidden')}}
+ function voucherApiError(data){
+   if(typeof data==='string'){
+     const s=data.toLowerCase();
+     if(s.includes('not found')||s.includes('used')||s.includes('unknown'))return 'Voucher jest nieprawidłowy, wygasł albo został już wykorzystany.';
+     if(s.includes('incorrect player'))return 'Podano nieprawidłowy nick Minecraft.';
+     return data;
+   }
+   if(data&&typeof data==='object'){
+     const vals=Object.values(data).flat().map(String);
+     if(vals.some(x=>/player/i.test(x)))return 'Podano nieprawidłowy nick Minecraft.';
+     if(vals.length)return vals.join(' ');
+   }
+   return 'Voucher jest nieprawidłowy, wygasł albo został już wykorzystany.';
+ }
 });

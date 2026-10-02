@@ -140,3 +140,24 @@ footer{border-top:1px solid var(--bp-line);margin-top:80px}
  .store-intro{padding:20px}.store-intro strong{font-size:15px}.store-glow{width:52px;height:52px}
  .hero-logo{width:105px;height:105px}
 }
+
+/* ===== VOUCHER / ASSETS / FOOTER POLISH ===== */
+.brand img{width:34px;height:34px;border-radius:9px;object-fit:cover;display:block;box-shadow:0 0 25px rgba(255,23,69,.14)}
+.hero-logo{background:radial-gradient(circle,rgba(255,23,69,.06),transparent 68%);border-radius:28px}
+.product-fallback-img{image-rendering:pixelated!important}
+.voucher-modal-box{width:min(470px,92vw);padding:30px;overflow:hidden}
+.voucher-modal-box:before{content:"";position:absolute;inset:-120px -120px auto auto;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,23,69,.16),transparent 68%);pointer-events:none}
+.voucher-visual{position:relative;width:76px;height:76px;margin:0 0 18px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,23,69,.25);background:#050506;box-shadow:0 15px 45px rgba(0,0,0,.4)}
+.voucher-visual img{width:100%;height:100%;object-fit:cover;transform:scale(1.05)}
+.voucher-kicker{color:var(--red2);font-size:8px;font-weight:900;letter-spacing:.18em}
+.voucher-modal-box h2{margin:6px 0 8px;font-size:28px;letter-spacing:-.045em}
+.voucher-sub{margin:0 0 24px;color:#777;font-size:10px;line-height:1.8;max-width:390px}
+.voucher-field{margin-top:14px}.voucher-field label{display:block;color:#8d8d92;font-size:8px;font-weight:900;letter-spacing:.12em;margin-bottom:7px}
+.voucher-modal-box .input{display:block;width:100%;height:46px;box-sizing:border-box;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.025);color:#fff;padding:0 14px;outline:none;font:600 11px Inter,Arial,sans-serif;transition:.2s}
+.voucher-modal-box .input::placeholder{color:#4e4e55}.voucher-modal-box .input:focus{border-color:rgba(255,23,69,.65);box-shadow:0 0 0 3px rgba(255,23,69,.08),0 0 30px rgba(255,23,69,.06)}
+.voucher-submit{width:100%;height:48px;margin-top:20px;display:flex;justify-content:center;align-items:center;gap:14px}.voucher-submit b{font-size:17px;font-weight:500}.voucher-submit.loading{opacity:.7;cursor:wait}
+.voucher-success{display:flex;gap:11px;align-items:center;margin-top:13px;padding:12px;border-radius:10px;background:rgba(41,215,125,.06);border:1px solid rgba(41,215,125,.16)}
+.voucher-success>span{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:rgba(41,215,125,.12);color:#29d77d;font-weight:900}.voucher-success b{display:block;font-size:10px}.voucher-success small{display:block;color:#666;margin-top:3px;font-size:8px}
+.voucher-note{display:flex;gap:8px;align-items:flex-start;margin-top:16px;color:#4f4f56;font-size:8px;line-height:1.6}.voucher-note>span{flex:none;display:grid;place-items:center;width:17px;height:17px;border-radius:50%;border:1px solid rgba(255,255,255,.08);color:#777}
+.site-footer{display:block}.site-footer .footer-disclaimer{margin-top:13px}.site-footer:after{content:"Strona zasilana przez VIshop.pl";display:block;margin-top:13px;color:#3f3f45;font-size:8px}.site-footer:after{cursor:pointer}
+@media(max-width:650px){.voucher-modal-box{padding:24px}.voucher-visual{width:64px;height:64px}}
