@@ -1,4 +1,4 @@
-const SHOP_ID=29430;
+const SHOP_ID=31216;
 const API=`https://dev123.vishop.pl/panel/shops/${SHOP_ID}`;
 const S={shop:null,servers:[],server:null,products:[],product:null,methods:[],qty:1};
 const $=x=>document.querySelector(x);
