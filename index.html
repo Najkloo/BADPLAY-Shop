@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BADPLAY Store</title>
+<meta name="description" content="Oficjalny sklep BADPLAY">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="ambient a"></div><div class="ambient b"></div>
+<header class="topbar">
+  <a class="brand" href="#"><span class="bp">BP</span><span>BAD<span>PLAY</span></span></a>
+  <nav><a class="active" href="#sklep">SKLEP</a><a href="#serwery">SERWERY</a><a href="#ostatnie">OSTATNIE ZAKUPY</a></nav>
+  <a id="discord" class="discord" href="#" target="_blank" rel="noopener">DISCORD</a>
+</header>
+
+<main>
+<section class="hero">
+  <div class="badge"><i></i> OFICJALNY SKLEP BADPLAY</div>
+  <h1>BAD<span>PLAY</span> STORE</h1>
+  <p>Wybierz serwer, produkt i dokonaj szybkiej płatności.</p>
+  <div class="hero-meta"><span></span><b>PREMIUM EXPERIENCE</b><span></span></div>
+</section>
+
+<section id="serwery" class="section">
+  <div class="heading"><div><small>01 / SERWERY</small><h2>Wybierz serwer</h2></div><div id="status" class="status"><i></i> Łączenie...</div></div>
+  <div id="servers" class="servers"></div>
+</section>
+
+<section id="sklep" class="section products-section">
+  <div class="heading"><div><small>02 / SKLEP</small><h2>Produkty</h2></div><div id="selectedServer" class="selected-server"></div></div>
+  <div id="products" class="products"><div class="empty">Ładowanie produktów...</div></div>
+</section>
+
+<section id="ostatnie" class="section recent-section">
+  <div class="heading"><div><small>03 / AKTYWNOŚĆ</small><h2>Ostatnie zakupy</h2></div></div>
+  <div id="recent" class="recent"><div class="empty">Ładowanie...</div></div>
+</section>
+</main>
+
+<footer><div class="footer-left"><span class="bp">BP</span><b>BADPLAY</b></div><span>Sklep zasilany przez <a href="https://vishop.pl" target="_blank" rel="noopener">VIshop.pl</a></span></footer>
+
+<div id="modal" class="modal hidden">
+ <div class="backdrop" data-close></div>
+ <div class="modal-box">
+  <button class="x" data-close>×</button>
+  <div class="modal-head"><div class="coin">₿</div><div><small>BADPLAY</small><h2 id="mName">BadCoin</h2></div></div>
+  <div id="mDesc" class="m-desc"></div>
+  <div id="sliderBox" class="slider-box hidden">
+   <div class="slider-label"><span id="sliderName">Ilość</span><strong><b id="qtyValue">2</b> <em id="qtyUnit">BADCOIN</em></strong></div>
+   <input id="qty" type="range" min="2" max="1000" value="2">
+   <div class="range"><span id="min">2</span><span id="max">1000</span></div>
+  </div>
+  <div class="form">
+   <label>Nick Minecraft<input id="player" maxlength="16" placeholder="Twój nick"></label>
+   <label>Metoda płatności<select id="provider"></select></label>
+   <label id="rules" class="rules hidden"><input id="accept" type="checkbox"><span>Akceptuję regulamin sklepu.</span></label>
+   <div id="error" class="error hidden"></div>
+   <div class="sum"><span>Do zapłaty</span><strong id="total">0,00 zł</strong></div>
+   <button id="buy" class="pay">KUP TERAZ</button>
+   <small class="safe">Bezpieczna płatność obsługiwana przez VIshop</small>
+  </div>
+ </div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
