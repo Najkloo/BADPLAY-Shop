@@ -214,3 +214,95 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 // Open voucher modal when the page is entered from the voucher button on the rules page.
 window.addEventListener('load',()=>{ if(new URLSearchParams(location.search).get('voucher')==='1'){ setTimeout(()=>document.querySelector('#voucherBtn')?.click(),250); } });
+
+/* =========================================================
+   BADPLAY INTERACTIVE LAYER
+   ========================================================= */
+(()=> {
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Scroll reveal
+  const revealTargets=document.querySelectorAll('.team-section,.products-section,.recent-section,.site-footer,.product,.server,.heading');
+  revealTargets.forEach(el=>el.classList.add('reveal'));
+  if(!reduce && 'IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('bp-visible');io.unobserve(entry.target)}});
+    },{threshold:.08});
+    revealTargets.forEach(el=>io.observe(el));
+  }else revealTargets.forEach(el=>el.classList.add('bp-visible'));
+
+  // Smooth navigation for local anchors
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const target=document.querySelector(a.getAttribute('href'));
+      if(!target)return;
+      e.preventDefault();
+      target.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+    });
+  });
+
+  // Cursor glow
+  const glow=document.querySelector('.bp-cursor-glow');
+  if(glow && !reduce && matchMedia('(pointer:fine)').matches){
+    window.addEventListener('pointermove',e=>{
+      glow.style.left=e.clientX+'px'; glow.style.top=e.clientY+'px'; glow.style.opacity='.8';
+    },{passive:true});
+  }
+
+  // Interactive team cards with subtle 3D tilt
+  if(!reduce && matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('[data-tilt]').forEach(card=>{
+      card.addEventListener('pointermove',e=>{
+        const r=card.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-.5;
+        const y=(e.clientY-r.top)/r.height-.5;
+        card.style.transform=`perspective(900px) rotateX(${(-y*5).toFixed(2)}deg) rotateY(${(x*7).toFixed(2)}deg) translateY(-3px)`;
+      });
+      card.addEventListener('pointerleave',()=>{card.style.transform=''});
+    });
+  }
+
+  // Lightweight animated particle background
+  const canvas=document.getElementById('bpParticles');
+  if(canvas && !reduce){
+    const ctx=canvas.getContext('2d');
+    let w=0,h=0,dpr=1,particles=[],raf=0,last=0;
+    const count=()=>Math.min(70,Math.max(28,Math.floor((innerWidth*innerHeight)/26000)));
+    const resize=()=>{
+      dpr=Math.min(devicePixelRatio||1,1.5); w=innerWidth; h=innerHeight;
+      canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.width=w+'px';canvas.style.height=h+'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      particles=Array.from({length:count()},()=>({
+        x:Math.random()*w,y:Math.random()*h,
+        vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.16,
+        r:Math.random()*1.7+.35,a:Math.random()*.45+.12
+      }));
+    };
+    const frame=t=>{
+      if(t-last<28){raf=requestAnimationFrame(frame);return} last=t;
+      ctx.clearRect(0,0,w,h);
+      for(const p of particles){
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<-10)p.x=w+10;if(p.x>w+10)p.x=-10;
+        if(p.y<-10)p.y=h+10;if(p.y>h+10)p.y=-10;
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=`rgba(255,23,69,${p.a})`;ctx.fill();
+      }
+      raf=requestAnimationFrame(frame);
+    };
+    addEventListener('resize',resize,{passive:true});resize();requestAnimationFrame(frame);
+    addEventListener('pagehide',()=>cancelAnimationFrame(raf),{once:true});
+  }
+
+  // Update active nav item based on the section currently on screen.
+  const team=document.getElementById('ekipa');
+  const shop=document.getElementById('sklep');
+  const navLinks=[...document.querySelectorAll('.topbar nav a[href^="#"]')];
+  if(team && navLinks.length){
+    const updateActive=()=>{
+      const y=scrollY+180;
+      navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#ekipa' && y>=team.offsetTop));
+    };
+    addEventListener('scroll',updateActive,{passive:true});updateActive();
+  }
+})();
